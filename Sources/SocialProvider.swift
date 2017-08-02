@@ -17,7 +17,6 @@ open class SocialProvider {
     //MARK: - Properties
     
     public class var token: String? { get { return nil } }
-    public static var currentUser: SocialUser?
     
     //MARK: - Callbacks
     

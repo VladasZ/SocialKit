@@ -11,6 +11,8 @@ import FacebookCore
 
 public class FBKit : SocialProvider {
     
+    public static var currentUser: SocialUser?
+    
     override public class var token: String? {
         get { return UserDefaults.standard.value(forKey: "FBKitToken") as? String }
         set { UserDefaults.standard.set(newValue, forKey: "FBKitToken") }

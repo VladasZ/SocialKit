@@ -10,6 +10,8 @@ import SwiftyVK
 
 public class VKKit : SocialProvider {
     
+    public static var currentUser: SocialUser?
+    
     //MARK: - Properties
     
     override public class var token: String? {
