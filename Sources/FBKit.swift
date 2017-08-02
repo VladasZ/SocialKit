@@ -33,6 +33,37 @@ public class FBKit : SocialProvider {
         FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
     }
     
+    public static func getUser(_ completion: (() -> ())?) {
+        
+        let connection = GraphRequestConnection()
+        connection.add(GraphRequest(graphPath: "/me", parameters: ["fields": "id, name"])) { httpResponse, result in
+            switch result {
+            case .success(let response):
+                
+                if let user = SocialUser(id:response.dictionaryValue?["id"], name: response.dictionaryValue?["name"]) {
+                    
+                    currentUser = user
+
+                    if completion == nil {
+                        _onGetUser?(user)
+                    }
+                    else {
+                        completion?()
+                    }
+                }
+                else {
+                    
+                    print("FBKit: Error - failed to parse user")
+                }
+                
+                print("Graph Request Succeeded: \(response)")
+            case .failed(let error):
+                print("FBKit: Error - Graph Request Failed: \(error)")
+            }
+        }
+        connection.start()
+    }
+    
     public override class func login(_ completion: SocialCompletion = nil) {
         
         FBSDKLoginManager().logIn(withReadPermissions: ["public_profile", "email", "user_birthday"], from: topmostController) { result, error in
@@ -44,27 +75,7 @@ public class FBKit : SocialProvider {
                 self.token = token
             }
             
-            let connection = GraphRequestConnection()
-            connection.add(GraphRequest(graphPath: "/me", parameters: ["fields": "id, name"])) { httpResponse, result in
-                switch result {
-                case .success(let response):
-                    
-                    if let user = SocialUser(id:response.dictionaryValue?["id"], name: response.dictionaryValue?["name"]) {
-                        
-                        _onGetUser?(user)
-                        currentUser = user
-                    }
-                    else {
-                        
-                        print("FBKit: Error - failed to parse user")
-                    }
-                    
-                    print("Graph Request Succeeded: \(response)")
-                case .failed(let error):
-                    print("FBKit: Error - Graph Request Failed: \(error)")
-                }
-            }
-            connection.start()
+            getUser(nil)
             
             if let error = error?.localizedDescription { print("FBKit: Error - " + error) }
         }

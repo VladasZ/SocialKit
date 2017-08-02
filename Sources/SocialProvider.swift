@@ -16,7 +16,8 @@ open class SocialProvider {
     
     //MARK: - Properties
     
-    public class var token: String? { get { return nil } }
+    public class var token: String?  { get { return nil } }
+    public class var isLogined: Bool { get { return token != nil } }
     
     //MARK: - Callbacks
     
