@@ -9,6 +9,7 @@ s.ios.deployment_target = '9.0'
 s.source_files   = 'Sources/**/*.swift'
 s.license        = 'MIT'
 s.dependency 'SwiftyVK'
+s.dependency 'FacebookCore'
 s.dependency 'FBSDKCoreKit'
 s.dependency 'FBSDKLoginKit'
 end
