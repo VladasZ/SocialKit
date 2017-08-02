@@ -32,6 +32,7 @@ public class VKKit : SocialProvider {
     override public class func logout() {
         
         token = nil
+        currentUser = nil
         VK.logOut()
     }
 
@@ -48,6 +49,26 @@ extension VKKit : VKDelegate {
             
             VKKit.token = token
             VKKit._onGetToken?(token)
+            
+            VK.API.Users.get([VK.Arg.fields : "domain"]).send(onSuccess: { (data) in
+                
+                guard let data = data.array?.first else { print("VKKit error - failed to parse user"); return }
+                
+                guard let fName = data["first_name"].string,
+                      let lName = data["last_name"].string else { print("VKKit error - failed to parse user"); return }
+                
+                if let user = SocialUser(id: data["domain"].string, name: fName + " " + lName) {
+                    VKKit.currentUser = user
+                    VKKit._onGetUser?(user)
+                }
+                else {
+                    print("VKKit error - failed to parse user")
+                }
+                
+            }, onError: { (error) in
+                
+                print(error)
+            })
         }
     }
     ///Called when SwiftyVK did unauthorize and remove token

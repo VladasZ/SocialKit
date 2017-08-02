@@ -7,6 +7,7 @@
 //
 
 import FBSDKLoginKit
+import FacebookCore
 
 public class FBKit : SocialProvider {
     
@@ -41,6 +42,28 @@ public class FBKit : SocialProvider {
                 self.token = token
             }
             
+            let connection = GraphRequestConnection()
+            connection.add(GraphRequest(graphPath: "/me", parameters: ["fields": "id, name"])) { httpResponse, result in
+                switch result {
+                case .success(let response):
+                    
+                    if let user = SocialUser(id:response.dictionaryValue?["id"], name: response.dictionaryValue?["name"]) {
+                        
+                        _onGetUser?(user)
+                        currentUser = user
+                    }
+                    else {
+                        
+                        print("FBKit: Error - failed to parse user")
+                    }
+                    
+                    print("Graph Request Succeeded: \(response)")
+                case .failed(let error):
+                    print("FBKit: Error - Graph Request Failed: \(error)")
+                }
+            }
+            connection.start()
+            
             if let error = error?.localizedDescription { print("FBKit: Error - " + error) }
         }
     }
@@ -48,6 +71,7 @@ public class FBKit : SocialProvider {
     override public class func logout() {
         
         token = nil
+        currentUser = nil
         FBSDKLoginManager().logOut()
         FBSDKAccessToken.setCurrent(nil)
     }

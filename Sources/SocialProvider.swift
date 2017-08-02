@@ -10,20 +10,24 @@ import Foundation
 
 public typealias SocialCompletion      = (() -> ())?
 public typealias SocialTokenCompletion = ((String) -> ())?
+public typealias SocialUserCompletion  = ((SocialUser) -> ())?
 
 open class SocialProvider {
     
     //MARK: - Properties
     
     public class var token: String? { get { return nil } }
+    public static var currentUser: SocialUser?
     
     //MARK: - Callbacks
     
-    public static var _onLogin:    SocialCompletion
-    static var _onGetToken: SocialTokenCompletion
+    public static var _onLogin: SocialCompletion
+    static var _onGetToken:     SocialTokenCompletion
+    static var _onGetUser:      SocialUserCompletion
     
     public static func onLogin   (_ action: SocialCompletion)      { _onLogin    = action }
     public static func onGetToken(_ action: SocialTokenCompletion) { _onGetToken = action }
+    public static func onGetUser (_ action: SocialUserCompletion)  { _onGetUser  = action }
     
     public class func initializeWithAppID(_ id: String)           { fatalError("Subclasses need to implement the `initializeWithAppID()` method.") }
     public class func login(_ completion: SocialCompletion = nil) { fatalError("Subclasses need to implement the `login()` method.")               }
