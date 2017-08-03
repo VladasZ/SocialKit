@@ -28,6 +28,7 @@ public class VKKit : SocialProvider {
     
     override public class func login(_ completion: SocialCompletion = nil) {
         
+        _onLogin = completion
         VK.logIn()
     }
     
@@ -35,9 +36,9 @@ public class VKKit : SocialProvider {
         
         token = nil
         currentUser = nil
+        _onLogin = nil
         VK.logOut()
     }
-
 }
 
 extension VKKit : VKDelegate {
@@ -50,7 +51,6 @@ extension VKKit : VKDelegate {
         if let token = parameters["access_token"] {
             
             VKKit.token = token
-            VKKit._onGetToken?(token)
             
             VK.API.Users.get([VK.Arg.fields : "domain"]).send(onSuccess: { (data) in
                 
@@ -61,10 +61,11 @@ extension VKKit : VKDelegate {
                 
                 if let user = SocialUser(id: data["domain"].string, name: fName + " " + lName) {
                     VKKit.currentUser = user
-                    VKKit._onGetUser?(user)
+                    VKKit._onLogin?()
                 }
                 else {
                     print("VKKit error - failed to parse user")
+                    VKKit._onLogin?()
                 }
                 
             }, onError: { (error) in

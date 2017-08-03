@@ -23,6 +23,11 @@ public enum SocialNetwork : String {
         }
     }
     
+    public static func logoutAll() {
+        
+        all.forEach { $0.logout() }
+    }
+    
     public static var all: [SocialProvider.Type] {
         
         return [FBKit.self, VKKit.self]

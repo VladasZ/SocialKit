@@ -33,7 +33,7 @@ public class FBKit : SocialProvider {
         FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
     }
     
-    public static func getUser(_ completion: (() -> ())?) {
+    public static func getUser(_ completion: @escaping () -> ()) {
         
         let connection = GraphRequestConnection()
         connection.add(GraphRequest(graphPath: "/me", parameters: ["fields": "id, name"])) { httpResponse, result in
@@ -44,12 +44,7 @@ public class FBKit : SocialProvider {
                     
                     currentUser = user
 
-                    if completion == nil {
-                        _onGetUser?(user)
-                    }
-                    else {
-                        completion?()
-                    }
+                    completion()
                 }
                 else {
                     
@@ -66,16 +61,18 @@ public class FBKit : SocialProvider {
     
     public override class func login(_ completion: SocialCompletion = nil) {
         
+        _onLogin = completion
+        
         FBSDKLoginManager().logIn(withReadPermissions: ["public_profile", "email", "user_birthday"], from: topmostController) { result, error in
             
-            if let token = result?.token.tokenString {
-                
-                _onGetToken?(token)
+            if let token = result?.token?.tokenString {
                 
                 self.token = token
+                getUser { _onLogin?() }
             }
-            
-            getUser(nil)
+            else {
+                print("FBKit: Error - no token")
+            }            
             
             if let error = error?.localizedDescription { print("FBKit: Error - " + error) }
         }
@@ -85,6 +82,7 @@ public class FBKit : SocialProvider {
         
         token = nil
         currentUser = nil
+        _onLogin = nil
         FBSDKLoginManager().logOut()
         FBSDKAccessToken.setCurrent(nil)
     }
