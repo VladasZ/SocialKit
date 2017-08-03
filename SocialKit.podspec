@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name           = 'SocialKit'
-s.version        = '0.2.4'
+s.version        = '0.2.5'
 s.summary        = "Social networks login kit"
 s.homepage       = "https://github.com/VladasZ/SocialKit"
 s.author         = { 'Vladas Zakrevskis' => '146100@gmail.com' }
