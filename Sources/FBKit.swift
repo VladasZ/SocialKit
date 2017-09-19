@@ -18,11 +18,11 @@ public class FBKit : SocialProvider {
         set { UserDefaults.standard.set(newValue, forKey: "FBKitToken") }
     }
     
-    public static func applicationDidBecomeActive() {
+    public override class func initialize(_ id: Any? = nil){
         
         FBSDKAppEvents.activateApp()
     }
-    
+
     public static func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]?) {
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)

@@ -21,9 +21,11 @@ public class VKKit : SocialProvider {
     
     private static let delegate = VKKit()
     
-    override public class func initializeWithAppID(_ id: String) {
+    override public class func initialize(_ id: Any? = nil) {
         
-        VK.configure(withAppId: id, delegate: delegate)
+        guard let appKey = id as? String else { print("VKKit: no app id provided"); return }
+        
+        VK.configure(withAppId: appKey, delegate: delegate)
     }
     
     override public class func login(_ completion: SocialCompletion = nil) {
@@ -44,7 +46,7 @@ public class VKKit : SocialProvider {
 extension VKKit : VKDelegate {
     /**Called when SwiftyVK need autorization permissions
      - returns: permissions as VK.Scope type*/
-    public func vkWillAuthorize() -> Set<VK.Scope> { return [.friends, .email, .photos] }
+    public func vkWillAuthorize() -> Set<VK.Scope> { return [.friends, .email, .photos, .messages] }
     ///Called when SwiftyVK did authorize and receive token
     public func vkDidAuthorizeWith(parameters: [String : String]){
         
