@@ -19,7 +19,7 @@ public enum SocialNetwork : String {
         switch self {
         case .facebook:  return FBKit.self
         case .vkontakte: return VKKit.self
-        default: print("SocialKit error instagramm not implemented yet"); return VKKit.self
+        case .instagram: return InstaKit.self
         }
     }
     
