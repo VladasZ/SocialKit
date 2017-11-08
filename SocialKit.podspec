@@ -8,7 +8,7 @@ s.source         = { :git => 'https://github.com/VladasZ/SocialKit.git', :tag =>
 s.ios.deployment_target = '9.0'
 s.source_files   = 'Sources/**/*.swift'
 s.license        = 'MIT'
-s.dependency 'SwiftyVK'
+s.dependency 'SwiftyVK', '~> 2.0.14'
 s.dependency 'FacebookCore'
 s.dependency 'FBSDKCoreKit'
 s.dependency 'FBSDKLoginKit'
