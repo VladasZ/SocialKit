@@ -82,10 +82,10 @@ public class InstaKit : SocialProvider {
                   let id = userData["id"] as? String
                 else { print("InstaKit error: failed to get user data"); return }
             
-            let user = SocialUser(id: id, name: name)
+            let user = SocialUser(id: id, name: name, network: .instagram)
             
             currentUser = user
-            controller.dismiss(animated: true) { _onLogin?() }
+            controller.dismiss(animated: true) { _onLogin?(nil) }
 
         }.resume()
     }

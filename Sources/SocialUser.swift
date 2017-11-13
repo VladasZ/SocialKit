@@ -8,19 +8,25 @@
 
 import Foundation
 
-public class SocialUser {
+public class SocialUser : CustomStringConvertible {
     
     public var id:   String
     public var name: String
-    
-    public init?(id: Any?, name: Any?) {
+    public var network: SocialNetwork
+
+    public init?(id: Any?, name: Any?, network: SocialNetwork) {
         
         guard let name = name as? String else { return nil }
         
+        self.network = network
         self.name = name
         
         if let id = id as? Int { self.id = String(id) }
         else if let id = id as? String { self.id = id }
         else { return nil }
+    }
+    
+    public var description: String {
+        return "\(network.rawValue.capitalized) user. \(name)"
     }
 }

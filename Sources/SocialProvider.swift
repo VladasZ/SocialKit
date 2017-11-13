@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias SocialCompletion = (() -> ())?
+public typealias SocialCompletion = ((_ error: String?) -> ())?
 
 open class SocialProvider {
     
@@ -16,6 +16,8 @@ open class SocialProvider {
     
     public class var token: String?  { get { return nil } }
     public class var isLogined: Bool { get { return token != nil } }
+    
+    internal init() { }
     
     //MARK: - Callbacks
     

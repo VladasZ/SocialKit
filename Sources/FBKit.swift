@@ -42,7 +42,7 @@ public class FBKit : SocialProvider {
             switch result {
             case .success(let response):
                 
-                if let user = SocialUser(id:response.dictionaryValue?["id"], name: response.dictionaryValue?["name"]) {
+                if let user = SocialUser(id:response.dictionaryValue?["id"], name: response.dictionaryValue?["name"], network: .facebook) {
                     
                     currentUser = user
 
@@ -70,7 +70,7 @@ public class FBKit : SocialProvider {
             if let token = result?.token?.tokenString {
                 
                 self.token = token
-                getUser { _onLogin?() }
+                getUser { _onLogin?(nil) }
             }
             else {
                 print("FBKit: Error - no token")
